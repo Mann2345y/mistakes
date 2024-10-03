@@ -5,7 +5,8 @@ import { OCConnect } from "@opencampus/ocid-connect-js";
 
 export default function App({ Component, pageProps }: AppProps) {
   const options = {
-    redirectUri: "http://localhost:3000/redirect",
+    redirectUri:
+      process.env.NEXT_PUBLIC_REDIRECT_URI ?? "http://localhost:3000",
     referralCode: "PARTNER6",
   };
 
