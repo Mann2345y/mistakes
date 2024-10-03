@@ -46,7 +46,7 @@ const MainWrapper: React.FC<MainWrapperProps> = ({ children }) => {
       </div>
       <div className="flex flex-col h-screen w-screen relative overflow-x-hidden overflow-y-auto z-10">
         <Navbar />
-        {children}
+        <div className="flex flex-col grow px-36">{children}</div>
       </div>
     </div>
   );

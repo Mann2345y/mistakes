@@ -4,11 +4,10 @@ import QRCodeImage from "../../../public/images/qrCode.png";
 import Image from "next/image";
 import Dropdown from "@/components/Shared/Dropdowns/Dropdown";
 import { useState } from "react";
+import Link from "next/link";
+import { whiteBlockClasses } from "@/styles/commonClasses";
 
 const Index = () => {
-  const whiteBlockClasses =
-    "w-full h-fit bg-white/85 rounded-xl border-[3px] border-solid border-black p-6 px-8 shadow-md font-nunito";
-
   const howItWorksBulletPoints = [
     "Safely link your digital wallet to start the process.",
     "Send your unwanted cryptocurrencies and NFTs to our designated burn address.",
@@ -20,7 +19,7 @@ const Index = () => {
   const [selectedChainForBurn, setSelectedChainForBurn] = useState("ethereum");
 
   return (
-    <div className="flex gap-8 px-6 md:px-16 lg:px-36 grow pb-8 flex-col-reverse md:flex-row">
+    <div className="flex gap-8 grow pb-8 flex-col-reverse md:flex-row">
       <div className={`${whiteBlockClasses}`}>
         <h5 className="font-black text-[22px] mb-3">Overview</h5>
         <p className="font-bold text-base leading-6">
@@ -43,15 +42,19 @@ const Index = () => {
           ))}
         </div>
         <div className="flex gap-6 flex-col md:flex-row">
-          <Button variant="contained">Asset Conversion Rates</Button>
-          <Button variant="contained">
-            <span>BURN AND EARN NOW</span>
-            <Image
-              src={FireIcon}
-              alt="#"
-              className="h-8 w-auto object-contain "
-            />
-          </Button>
+          <Link className="grow flex" href={"/conversion-rates"}>
+            <Button variant="contained">Asset Conversion Rates</Button>
+          </Link>
+          <Link className="grow flex" href={"/burn"}>
+            <Button variant="contained">
+              <span>BURN AND EARN NOW</span>
+              <Image
+                src={FireIcon}
+                alt="#"
+                className="h-8 w-auto object-contain "
+              />
+            </Button>
+          </Link>
         </div>
       </div>
       <div className={`w-full md:min-w-[300px] md:max-w-[300px] h-fit grow`}>

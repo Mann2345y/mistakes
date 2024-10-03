@@ -5,6 +5,7 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/styles/commonClasses.ts",
   ],
   theme: {
     extend: {
@@ -13,6 +14,9 @@ const config: Config = {
         "black-2": "#141414",
         "black-3": "#0A0403",
         orange: "#FF8600",
+        red: "#FF4444",
+        green: "#00A01A",
+        grey: "#666666",
       },
       fontSize: {
         "2xs": "0.5rem",
