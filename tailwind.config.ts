@@ -17,6 +17,9 @@ const config: Config = {
         red: "#FF4444",
         green: "#00A01A",
         grey: "#666666",
+        "grey-2": "#CCCCCC",
+        "transparent-black": "#0000000D",
+        "transparent-black-2": "#2222221A",
       },
       fontSize: {
         "2xs": "0.5rem",

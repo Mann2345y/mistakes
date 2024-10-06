@@ -1,19 +1,17 @@
 import React, { useMemo, useState } from "react";
-import LogoImage from "../../../../public/images/logo.png";
-import OcLogo from "../../../../public/images/ocLogoSmall.png";
+import LogoImage from "../../../public/images/logo.png";
+import OcLogo from "../../../public/images/ocLogoSmall.png";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useOCAuth } from "@opencampus/ocid-connect-js";
-import { DownIcon } from "../Icons";
-import ClickAwayListener from "../ClickAwayListener";
+import { DownIcon } from "@/components/Icons";
+import ClickAwayListener from "@/components/ClickAwayListener";
 
 const Navbar = () => {
   const [showUserOptions, setShowUserOptions] = useState(false);
   const router = useRouter();
   const { authState, ocAuth } = useOCAuth();
-
-  console.log({ authState, ocAuth });
 
   const handleLogin = async () => {
     try {
@@ -87,7 +85,7 @@ const Navbar = () => {
                 </p>
 
                 <div
-                  className={`origin-top-left absolute left-0 mt-2 w-56 rounded-md shadow-lg text-white bg-white ring-1 ring-white ring-opacity-5 transition-all duration-300 ease-in-out transform ${
+                  className={`origin-top-left absolute right-0 mt-2 w-56 rounded-md shadow-lg text-white bg-white ring-1 ring-white ring-opacity-5 transition-all duration-300 ease-in-out transform ${
                     showUserOptions
                       ? "scale-y-100 opacity-100"
                       : "scale-y-0 opacity-0"

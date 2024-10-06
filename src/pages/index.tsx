@@ -1,4 +1,4 @@
-import ConnectOCIDButton from "@/components/Shared/Buttons/ConnectOCIDButton";
+import ConnectOCIDButton from "@/components/Buttons/ConnectOCIDButton";
 import { useOCAuth } from "@opencampus/ocid-connect-js";
 import { useRouter } from "next/router";
 import { useEffect } from "react";

@@ -1,5 +1,5 @@
-import { PriceChangeIcon, SearchIcon } from "@/components/Shared/Icons";
-import Table from "@/components/Shared/Table/Table";
+import { PriceChangeIcon, SearchIcon } from "@/components/Icons";
+import Table from "@/components/Table/Table";
 import { whiteBlockClasses } from "@/styles/commonClasses";
 import React, { useEffect, useState } from "react";
 

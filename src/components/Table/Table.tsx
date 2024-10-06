@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NextPageIcon, PreviousPageIcon } from "../Icons";
-import TableButton from "@/components/Shared/Buttons/TableButton";
+import TableButton from "@/components/Buttons/TableButton";
 
 interface TableProps {
   headers: { label: string; value: string; align?: string }[];
@@ -48,7 +48,7 @@ const Table: React.FC<TableProps> = ({ headers, data }) => {
             ))}
           </tr>
         </thead>
-        <tbody className="bg-white ">
+        <tbody className="bg-transparent">
           {paginatedData.map((row, rowIndex) => (
             <tr key={rowIndex} className="border-b border-solid border-black">
               {headers.map((header, cellIndex) => {

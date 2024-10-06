@@ -1,9 +1,9 @@
 import React, { ReactNode } from "react";
-import HeroImageBig from "../../../public/images/herobg.png";
+import HeroImageBig from "../../public/images/herobg.png";
 import Image from "next/image";
-import useMediaQuery from "@/hooks/useMediaQuery";
-import Navbar from "@/components/Shared/Navbar/Navbar";
+import Navbar from "@/components/Navbar/Navbar";
 import { Inter, Nunito, Permanent_Marker, Poppins } from "next/font/google";
+import { axiosInstance } from "@/services/axios";
 
 type MainWrapperProps = {
   children: ReactNode;
@@ -31,7 +31,20 @@ const poppins = Poppins({
 });
 
 const MainWrapper: React.FC<MainWrapperProps> = ({ children }) => {
-  const isBigScreen = useMediaQuery({ size: "1280px" });
+  axiosInstance.interceptors.request.use(
+    (config) => {
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("token");
+        if (token) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+        }
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
   return (
     <div
@@ -46,7 +59,7 @@ const MainWrapper: React.FC<MainWrapperProps> = ({ children }) => {
       </div>
       <div className="flex flex-col h-screen w-screen relative overflow-x-hidden overflow-y-auto z-10">
         <Navbar />
-        <div className="flex flex-col grow px-36">{children}</div>
+        <div className="flex flex-col grow px-16 pb-24">{children}</div>
       </div>
     </div>
   );

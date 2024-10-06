@@ -4,6 +4,9 @@ import { GrFormPrevious as PreviousPageIcon } from "react-icons/gr";
 import { GrFormNext as NextPageIcon } from "react-icons/gr";
 import { FaCaretUp as PriceChangeIcon } from "react-icons/fa";
 import { IoSearchSharp as SearchIcon } from "react-icons/io5";
+import { AiOutlinePlus as PlusIcon } from "react-icons/ai";
+import { IoFilterOutline as FilterIcon } from "react-icons/io5";
+import { IoCheckmark as CheckIcon } from "react-icons/io5";
 
 export {
   DownIcon,
@@ -12,4 +15,7 @@ export {
   NextPageIcon,
   PriceChangeIcon,
   SearchIcon,
+  PlusIcon,
+  FilterIcon,
+  CheckIcon,
 };

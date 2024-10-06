@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import OcLogoImage from "../../../../public/images/ocLogoBig.png";
+import OcLogoImage from "../../../public/images/ocLogoBig.png";
 import { useOCAuth } from "@opencampus/ocid-connect-js";
 
 const ConnectOCIDButton = () => {

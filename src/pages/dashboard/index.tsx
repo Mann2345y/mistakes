@@ -1,8 +1,8 @@
-import Button from "@/components/Shared/Buttons/Button";
+import Button from "@/components/Buttons/Button";
 import FireIcon from "../../../public/images/fireIcon.png";
 import QRCodeImage from "../../../public/images/qrCode.png";
 import Image from "next/image";
-import Dropdown from "@/components/Shared/Dropdowns/Dropdown";
+import Dropdown from "@/components/Dropdowns/Dropdown";
 import { useState } from "react";
 import Link from "next/link";
 import { whiteBlockClasses } from "@/styles/commonClasses";

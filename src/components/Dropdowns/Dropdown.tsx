@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import ClickAwayListener from "@/components/Shared/ClickAwayListener";
+import ClickAwayListener from "@/components/ClickAwayListener";
 import { AngleDownIcon, DownIcon } from "../Icons";
 
 interface Option {
@@ -11,9 +11,15 @@ interface DropdownProps {
   options: Option[];
   value: string;
   onChange: (value: string) => void;
+  variant?: "default" | "outlined";
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ options, value, onChange }) => {
+const Dropdown: React.FC<DropdownProps> = ({
+  options,
+  value,
+  onChange,
+  variant = "default",
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -29,7 +35,17 @@ const Dropdown: React.FC<DropdownProps> = ({ options, value, onChange }) => {
     return options.find((option) => option.value === value);
   }, [options, value]);
 
-  console.log({ selectedOption });
+  const buttonClassNames = `inline-flex justify-between items-center w-full rounded-md border-2 h-12 text-sm font-medium shadow-sm px-4 py-2 focus:outline-none ${
+    variant === "outlined"
+      ? "border-black bg-white text-black"
+      : "border-gray-300 bg-black text-white"
+  }`;
+
+  const menuClassNames = `origin-top-left absolute left-0 mt-2 w-56 rounded-md shadow-lg ring-1 ring-opacity-5 transition-all duration-300 ease-in-out transform ${
+    variant === "outlined"
+      ? "border-black bg-white text-black ring-black"
+      : "bg-black text-white ring-black"
+  } ${isOpen ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"}`;
 
   return (
     <ClickAwayListener onClickAway={() => setIsOpen(false)}>
@@ -37,7 +53,7 @@ const Dropdown: React.FC<DropdownProps> = ({ options, value, onChange }) => {
         <div>
           <button
             type="button"
-            className="inline-flex justify-between items-center w-full rounded-md border border-gray-300 text-white shadow-sm px-4 py-2 bg-black text-sm font-medium  focus:outline-none"
+            className={buttonClassNames}
             onClick={toggleDropdown}
           >
             {selectedOption ? selectedOption.label : "Select an option"}
@@ -50,17 +66,13 @@ const Dropdown: React.FC<DropdownProps> = ({ options, value, onChange }) => {
           </button>
         </div>
 
-        <div
-          className={`origin-top-left absolute left-0 mt-2 w-56 rounded-md shadow-lg text-white bg-black ring-1 ring-black ring-opacity-5 transition-all duration-300 ease-in-out transform ${
-            isOpen ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
-          }`}
-        >
+        <div className={menuClassNames}>
           <div className="py-1">
             {options.map((option) => (
               <a
                 key={option.value}
                 href="#"
-                className="block px-4 py-2 text-sm "
+                className="block px-4 py-2 text-sm"
                 onClick={() => handleOptionClick(option.value)}
               >
                 {option.label}
