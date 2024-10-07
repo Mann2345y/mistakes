@@ -7,11 +7,11 @@ import UserImageIcon from "../../../public/images/userimage.png";
 import Image from "next/image";
 
 type LeaderboardTableRows = {
-  rank?: number;
-  ocid?: string;
-  nftsBurned?: string;
-  tokensBurned?: string;
-  pointsEarned?: string;
+  rank?: React.JSX.Element;
+  ocid?: React.JSX.Element;
+  nftsBurned?: React.JSX.Element;
+  tokensBurned?: React.JSX.Element;
+  pointsEarned?: React.JSX.Element;
 };
 
 const Index = () => {

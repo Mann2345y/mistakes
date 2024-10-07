@@ -4,12 +4,7 @@ import TableButton from "@/components/Buttons/TableButton";
 
 interface TableProps {
   headers: { label: string; value: string; align?: string }[];
-  data: {
-    name: React.JSX.Element | string;
-    tokenAddress: React.JSX.Element | string;
-    tokenStandard: React.JSX.Element | string;
-    conversionRate: React.JSX.Element | string;
-  }[];
+  data: { [key: string]: JSX.Element }[];
 }
 
 const Table: React.FC<TableProps> = ({ headers, data }) => {
