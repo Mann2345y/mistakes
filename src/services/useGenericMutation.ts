@@ -6,10 +6,6 @@ import {
 import { postData } from "./axios";
 import { queryClient } from "@/pages/_app";
 
-const getToken = () => {
-  return localStorage.getItem("authToken");
-};
-
 interface UseGenericMutationParams<TData, TError, TVariables, TContext>
   extends Partial<UseMutationOptions<TData, TError, TVariables, TContext>> {
   endpoint: string;
@@ -18,9 +14,13 @@ interface UseGenericMutationParams<TData, TError, TVariables, TContext>
 
 const useGenericMutation = <TData, TError, TVariables, TContext = unknown>({
   endpoint,
-
-  mutationFn = (variables: TVariables) =>
-    postData(endpoint, variables, getToken()),
+  mutationFn = async (variables: TVariables) => {
+    try {
+      return await postData(endpoint, variables);
+    } catch (error) {
+      throw error;
+    }
+  },
   ...options
 }: UseGenericMutationParams<TData, TError, TVariables, TContext>) => {
   return useMutation<TData, TError, TVariables, TContext>(

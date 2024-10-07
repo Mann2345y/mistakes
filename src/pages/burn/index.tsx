@@ -5,7 +5,7 @@ import { FilterIcon, SearchIcon } from "@/components/Icons";
 import { whiteBlockClasses } from "@/styles/commonClasses";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import FireIcon from "../../../public/images/fireIcon.png";
 import { formatNumberIndian } from "@/utils/helperFuncs";
 import useGenericQuery from "@/services/useGenericQuery";
@@ -29,11 +29,17 @@ const Index = () => {
 
   const { address } = useAccount();
 
+  const walletAddress = useMemo(() => {
+    return address ?? "";
+  }, [address]);
+
   const { data } = useGenericQuery(
-    [API_ROUTES.GET_ASSETS, address ?? ""],
-    `${API_ROUTES.GET_ASSETS}/656476/${address}`,
+    [API_ROUTES.GET_ASSETS, walletAddress],
+    `${API_ROUTES.GET_ASSETS}`,
     {
       enabled: !!address,
+      pathParams: { chainId: "656476", walletAddress: "123" },
+      queryParams: { page: 1, limit: 10 },
     }
   );
 

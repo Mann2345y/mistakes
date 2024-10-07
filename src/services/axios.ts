@@ -14,11 +14,7 @@ export const fetchData = async (endpoint: string) => {
   return response.data;
 };
 
-export const postData = async (
-  endpoint: string,
-  data: any,
-  token: string | null
-) => {
+export const postData = async (endpoint: string, data: any) => {
   const response = await axiosInstance.post(`${endpoint}`, data);
   return response.data;
 };
