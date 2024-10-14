@@ -3,6 +3,8 @@ import Table from "@/components/Table/Table";
 import { whiteBlockClasses } from "@/styles/commonClasses";
 import React, { useEffect, useState } from "react";
 import moment from "moment-timezone";
+import { API_ROUTES } from "@/services/routes";
+import useGenericQuery from "@/services/useGenericQuery";
 
 const getRandomDate = (start: Date, end: Date) =>
   new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
@@ -15,31 +17,41 @@ type ActivitiesTableRows = {
   pointsEarned: React.JSX.Element;
 };
 
-const Index = () => {
-  const generateData = () =>
-    Array.from({ length: 15 }, (_, i) => ({
-      id: i + 1,
-      date: getRandomDate(new Date(2024, 0, 1), new Date()),
-      tokenAddress: `0x${Math.random()
-        .toString(16)
-        .substr(2, 40)
-        .padEnd(24, "0")}...`,
-      nftsBurned: (Math.random() * 90 + 10).toFixed(0),
-      tokensBurned: (Math.random() * 90 + 10).toFixed(0),
-      pointsEarned: (Math.random() * 9000 + 1000).toFixed(0),
-    }));
+type GlobalData = {
+  total_global_points: string;
+  total_global_nft_burned: string;
+  total_global_token_burned: string;
+  recent_transactions: {
+    ocid: string;
+    wallet: string;
+    t_add: string;
+    t_id: string;
+    score_earned: string;
+    txn_hash: string;
+    timestamp: string;
+  }[];
+};
 
-  const [data, setData] = useState<ActivitiesTableRows[]>([]);
+const Index = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [tableData, setTableData] = useState<ActivitiesTableRows[]>([]);
+
+  const { data } = useGenericQuery(
+    [API_ROUTES.GET_GLOBAL_DETAILS,pageSize.toString(),currentPage.toString()],
+    API_ROUTES.GET_GLOBAL_DETAILS
+  );
 
   useEffect(() => {
-    const dataArray = generateData();
-    const tableRowsData = dataArray.map((row) => {
-      const datePart = moment(row?.date)
+    const dataArray = (data as any)?.recent_transactions;
+    console.log(dataArray, "recent Activities dataArray");
+    const tableRowsData = dataArray?.map((row) => {
+      const datePart = moment(row?.timestamp)
         .tz("America/New_York") // Assuming EST is your time zone
         .format("DD MMM YYYY");
 
       // Format the time part with time zone
-      const timePart = moment(row?.date)
+      const timePart = moment(row?.timestamp)
         .tz("America/New_York")
         .format("HH:mm z (UTCZ)");
       return {
@@ -49,25 +61,27 @@ const Index = () => {
             <p className="text-gren">{timePart}</p>
           </div>
         ),
-        wallet: <div className="!font-bold">{row?.tokenAddress}</div>,
+        wallet: (
+          <div className="!font-bold">{`${row?.wallet.slice(0, 10)}...${row?.wallet.slice(38,42)}`}</div>
+        ),
         nftsBurned: (
           <div className="!font-bold !text-right">{row?.nftsBurned}</div>
         ),
         tokensBurned: (
           <div className="!font-bold gap-3 flex items-center justify-end">
-            {row?.tokensBurned}
+            {"n/a"}
           </div>
         ),
         pointsEarned: (
           <div className="!font-bold text-orange !text-right">
-            {row?.pointsEarned}
+            {row?.score_earned}
           </div>
         ),
       };
     });
 
-    setData(tableRowsData);
-  }, []);
+    setTableData(tableRowsData);
+  }, [data]);
 
   return (
     <>
@@ -103,7 +117,11 @@ const Index = () => {
               align: "right",
             },
           ]}
-          data={data}
+          data={tableData}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          setPageSize={setPageSize}
         />
       </div>
     </>

@@ -2,6 +2,8 @@ import { PriceChangeIcon, SearchIcon } from "@/components/Icons";
 import Table from "@/components/Table/Table";
 import { whiteBlockClasses } from "@/styles/commonClasses";
 import React, { useEffect, useState } from "react";
+import { API_ROUTES } from "@/services/routes";
+import useGenericQuery from "@/services/useGenericQuery";
 
 type ConversionTableRows = {
   name: React.JSX.Element;
@@ -10,64 +12,54 @@ type ConversionTableRows = {
   conversionRate: React.JSX.Element;
 };
 
+type ConversionData = {
+  contract_address: string;
+  name: string;
+  rate: string;
+  prev_rate: string;
+  type: string;
+};
+
 const Index = () => {
   const [search, setSearch] = useState("");
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const generateData = () =>
-    Array.from({ length: 15 }, (_, i) => ({
-      id: i + 1,
-      name: [
-        "Digital Gem",
-        "EcoCoin",
-        "ArtBlock",
-        "TokenTree",
-        "PixelPort",
-        "Quantumbits",
-        "LegacyLedger",
-        "MysticMint",
-        "EchoAsset",
-        "CryptoCanvas",
-      ][Math.floor(Math.random() * 10)],
-      conversionRate: (Math.random() * 900 + 100).toFixed(2),
-      tokenAddress: `0x${Math.floor(Math.random() * 1e16)
-        .toString(16)
-        .padStart(40, "0")}`,
-      tokenStandard: ["ERC-20", "ERC-721", "ERC-1155"][
-        Math.floor(Math.random() * 3)
-      ],
-      pricingChange: ["increased", "decreased"][Math.floor(Math.random() * 2)],
-    }));
+  const { data } = useGenericQuery(
+    [API_ROUTES.GET_CONVERSION_RATE, pageSize.toString(), currentPage.toString()],
+    API_ROUTES.GET_CONVERSION_RATE
+  );
 
-  const [data, setData] = useState<ConversionTableRows[]>([]);
+  const [tableData, setTableData] = useState<ConversionTableRows[]>([]);
 
   useEffect(() => {
-    const dataArray = generateData();
-    const tableRowsData = dataArray.map((row) => {
+    const dataArray = data ?? [];
+    const tableRowsData = (dataArray as any[])?.map((row) => {
       return {
         name: <div className="!text-orange !font-bold">{row?.name}</div>,
-        tokenAddress: <div className="!font-bold">{row?.tokenAddress}</div>,
+        tokenAddress: <div className="!font-bold">{row?.contract_address}</div>,
         tokenStandard: (
-          <div className="!font-bold !text-right">{row?.tokenStandard}</div>
+          <div className="!font-bold !text-right">{row?.type}</div>
         ),
         conversionRate: (
           <div className="!font-bold gap-3 flex items-center justify-end">
             <PriceChangeIcon
               size={21}
               className={
-                row?.pricingChange === "increased"
+                Number(row?.prev_rate) - Number(row?.rate) < 0
                   ? "text-green rotate-0"
                   : "text-red rotate-180"
               }
             />
 
-            {row?.conversionRate}
+            {row?.rate}
           </div>
         ),
       };
     });
 
-    setData(tableRowsData);
-  }, []);
+    setTableData(tableRowsData);
+  }, [data]);
 
   return (
     <>
@@ -112,7 +104,11 @@ const Index = () => {
               align: "right",
             },
           ]}
-          data={data}
+          data={tableData}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
         />
       </div>
     </>

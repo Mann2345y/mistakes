@@ -9,21 +9,66 @@ import EthIcon from "../../../public/images/ethereumIcon.png";
 import Image from "next/image";
 import "@rainbow-me/rainbowkit/styles.css";
 import { useAccount } from "wagmi";
+import useGenericQuery from "@/services/useGenericQuery";
+import { API_ROUTES } from "@/services/routes";
+import useGenericMutation from "@/services/useGenericMutation";
+import { toast } from "react-toastify";
 
 const Index = () => {
   const { setOpenModal, setModalType } = useModalContext();
 
-  const { authState, ocAuth } = useOCAuth();
+  const { ocAuth } = useOCAuth();
+
+  const { mutateAsync: unlinkWallet } = useGenericMutation({
+    endpoint: API_ROUTES.UNLINK_WALLET,
+    onSuccess: async () => {
+      toast.success("Wallet linked successfully.");
+    },
+    onError: () => {
+      toast.error("Something went wrong. Please try again.");
+    },
+  });
+
+  const eduUsername = useMemo(() => {
+    return typeof ocAuth?.getAuthInfo === "function"
+      ? ocAuth.getAuthInfo()?.edu_username ?? ""
+      : "";
+  }, [ocAuth]);
+
+  interface WalletData {
+    walletsLinked: { ocid: string }[];
+  }
+
+  const { data } = useGenericQuery<WalletData>(
+    [API_ROUTES.GET_USER_WALLETS, eduUsername],
+    API_ROUTES.GET_USER_WALLETS,
+    {
+      pathParams: { ocid: eduUsername },
+      enabled: !!eduUsername,
+    }
+  );
 
   const userWallets = useMemo(() => {
     if (Object.keys(ocAuth).length === 0) return [];
 
     const accountDataLinkedToOCID = ocAuth.getAuthInfo();
 
+    console.log({ data });
+
+    const linkedWallets = data?.walletsLinked;
+
+    console.log({ linkedWallets });
+
+    const wallets =
+      linkedWallets?.map((wallet: any) => {
+        return { ocid: wallet, walletIcon: EthIcon };
+      }) ?? [];
+
     return [
       { ocid: accountDataLinkedToOCID?.eth_address, walletIcon: EthIcon },
+      ...wallets,
     ];
-  }, [ocAuth]);
+  }, [ocAuth, data]);
 
   const { address } = useAccount();
 
@@ -57,7 +102,17 @@ const Index = () => {
                   {wallet?.ocid?.slice(0, 6)}.....{wallet?.ocid?.slice(-6)}
                 </p>
               </div>
-              <button className="border-b border-solid border-orange text-orange !font-bold text-sm">
+              <button
+                className="border-b border-solid border-orange text-orange !font-bold text-sm"
+                onClick={async () => {
+                  const body = {
+                    wallet: wallet.ocid,
+                    ocid: ocAuth.getAuthInfo()?.edu_username,
+                  };
+
+                  await unlinkWallet(body);
+                }}
+              >
                 Unlink
               </button>
             </div>

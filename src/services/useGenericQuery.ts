@@ -21,7 +21,7 @@ const buildUrlWithParams = (
 };
 
 const useGenericQuery = <T>(
-  keys: string[],
+  keys: (string | number)[],
   endpoint: string,
   options?: Omit<UseQueryOptions<T>, "queryKey" | "queryFn"> & {
     pathParams?: Record<string, any>;
@@ -37,8 +37,8 @@ const useGenericQuery = <T>(
           options?.pathParams,
           options?.queryParams
         );
-        const { data } = await fetchData(finalEndpoint);
-        return data;
+        const response = await fetchData(finalEndpoint);
+        return response?.data ?? {};
       },
       ...options,
     },

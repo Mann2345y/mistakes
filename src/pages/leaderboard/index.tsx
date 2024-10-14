@@ -16,9 +16,10 @@ type LeaderboardTableRows = {
 
 const Index = () => {
   const [search, setSearch] = useState("");
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const { data } = useGenericQuery(
-    [API_ROUTES.GET_LEADERBOARD],
+    [API_ROUTES.GET_LEADERBOARD, pageSize.toString(), currentPage.toString()],
     API_ROUTES.GET_LEADERBOARD
   );
 
@@ -110,6 +111,10 @@ const Index = () => {
             },
           ]}
           data={mockData}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          setPageSize={setPageSize}
+          pageSize={pageSize}
         />
       </div>
     </>

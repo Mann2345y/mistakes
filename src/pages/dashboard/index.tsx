@@ -6,6 +6,23 @@ import Dropdown from "@/components/Dropdowns/Dropdown";
 import { useState } from "react";
 import Link from "next/link";
 import { whiteBlockClasses } from "@/styles/commonClasses";
+import { API_ROUTES } from "@/services/routes";
+import useGenericQuery from "@/services/useGenericQuery";
+
+type GlobalData = {
+  total_global_points: string;
+  total_global_nft_burned: string;
+  total_global_token_burned: string;
+  recent_transactions: {
+    ocid: string;
+    wallet: string;
+    t_add: string;
+    t_id: string;
+    score_earned: string;
+    txn_hash: string;
+    timestamp: string;
+  }[];
+};
 
 const Index = () => {
   const howItWorksBulletPoints = [
@@ -16,8 +33,14 @@ const Index = () => {
     "Monitor your earnings and rankings directly from your dashboard.",
   ];
 
-  const [selectedChainForBurn, setSelectedChainForBurn] = useState("ethereum");
+  const [selectedChainForBurn, setSelectedChainForBurn] =
+    useState<string>("ethereum");
 
+  const { data } = useGenericQuery<GlobalData>(
+    [API_ROUTES.GET_GLOBAL_DETAILS],
+    API_ROUTES.GET_GLOBAL_DETAILS
+  );
+  
   return (
     <div className="flex gap-8 grow pb-8 flex-col-reverse md:flex-row">
       <div className={`${whiteBlockClasses}`}>
@@ -71,17 +94,17 @@ const Index = () => {
           </p>
           <div className="h-[1px] w-full bg-black my-3"></div>
           <div className="my-2">
-            <h5 className="font-extrabold text-[20px]">6, 392, 201</h5>
+            <h5 className="font-extrabold text-[20px]">{(data as any)?.total_global_points}</h5>
             <p className="font-semibold text-base">
               OC points up for distribution
             </p>
           </div>
           <div className="my-2">
-            <h5 className="font-extrabold text-[20px]">3,328,381</h5>
+            <h5 className="font-extrabold text-[20px]">{(data as any)?.total_global_nft_burned}</h5>
             <p className="font-semibold text-base">NFTs burned</p>
           </div>
           <div className="my-2">
-            <h5 className="font-extrabold text-[20px]">1, 049, 283</h5>
+            <h5 className="font-extrabold text-[20px]">{(data as any)?.total_global_token_burned}</h5>
             <p className="font-semibold text-base">Fungible Tokens burned</p>
           </div>
           <div className="h-[1px] w-full bg-black my-3"></div>

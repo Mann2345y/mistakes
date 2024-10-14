@@ -39,9 +39,9 @@ const AddWalletModal = () => {
     try {
       if (signer) {
         const signedMessage = await signer.signMessage("login");
-
+        toast.loading("Adding wallet in OCID. Please wait...");
         const body = {
-          address,
+          wallet: address,
           message: "login",
           signature: signedMessage,
           ocid: ocAuth.getAuthInfo()?.edu_username,

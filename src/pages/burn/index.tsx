@@ -38,8 +38,7 @@ const Index = () => {
     `${API_ROUTES.GET_ASSETS}`,
     {
       enabled: !!address,
-      pathParams: { chainId: "656476", walletAddress: "123" },
-      queryParams: { page: 1, limit: 10 },
+      pathParams: { chainId: "656476", walletAddress },
     }
   );
 

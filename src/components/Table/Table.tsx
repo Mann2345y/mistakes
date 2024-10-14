@@ -5,33 +5,40 @@ import TableButton from "@/components/Buttons/TableButton";
 interface TableProps {
   headers: { label: string; value: string; align?: string }[];
   data: { [key: string]: JSX.Element }[];
+  pageSize: number;
+  currentPage: number;
+  setPageSize: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Table: React.FC<TableProps> = ({ headers, data }) => {
-  const pageSize = 10;
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const totalPages = Math.ceil(data.length / pageSize);
+const Table: React.FC<TableProps> = ({
+  headers,
+  data,
+  pageSize,
+  currentPage,
+  setPageSize,
+  setCurrentPage,
+}) => {
+  const totalPages = Math.ceil(data?.length / pageSize);
 
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
 
-  const paginatedData = data.slice(
+  const paginatedData = data?.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
 
-  const emptyRows = pageSize - paginatedData.length;
+  const emptyRows = pageSize - paginatedData?.length;
 
   return (
     <div className="overflow-x-auto !font-inter">
       <table className="w-full border-collapse table-auto min-w-[800px]">
         <thead className="mb-16">
           <tr>
-            {headers.map((header, index) => (
+            {headers?.map((header, index) => (
               <th
                 key={index}
                 className={`${
@@ -44,9 +51,9 @@ const Table: React.FC<TableProps> = ({ headers, data }) => {
           </tr>
         </thead>
         <tbody className="bg-transparent">
-          {paginatedData.map((row, rowIndex) => (
+          {paginatedData?.map((row, rowIndex) => (
             <tr key={rowIndex} className="border-b border-solid border-black">
-              {headers.map((header, cellIndex) => {
+              {headers?.map((header, cellIndex) => {
                 const cellValue = row[header?.value as keyof typeof row];
 
                 return (
